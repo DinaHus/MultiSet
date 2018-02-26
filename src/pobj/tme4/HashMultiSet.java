@@ -1,10 +1,14 @@
 package pobj.tme4;
 
+import java.util.AbstractCollection;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-public class HashMultiSet<T> implements MultiSet<T>{
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T>{
 	private HashMap<T,Integer> col;
 	int size =0;
 
@@ -62,26 +66,47 @@ public class HashMultiSet<T> implements MultiSet<T>{
 		}
 	}
 
+	/**
+	 * ajoute un objet T dans la liste courante sans valeur
+	 * @param T object
+	 * @return true ou false
+	 */
 	@Override
 	public boolean add(T e) {
 		return this.add(e,1);
 	}
 
+	/**
+	 * retire 
+	 * @param Object e
+	 * @return true ou false
+	 */
 	@Override
 	public boolean remove(Object e) {
 		return col.remove(e,1);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean remove(Object e, int count) {
-		// TODO Auto-generated method stub
-		return false;
+		if(col.containsKey(e)){
+			if(col.get(e) == 1)
+				col.remove(e);
+			else
+				col.put((T)e, col.get(e) - 1);
+			size--;
+		}
+		return true;
 	}
-
+	/**
+	 * retourne la valeur associer a un objet T de la liste
+	 * @param T object
+	 */
 	@Override
 	public int count(T o) {
-		// TODO Auto-generated method stub
+		if(col.get(o) == null) 
 			return 0;
+		return col.get(o).intValue();
 	}
 	/**
 	 * effectue un clear de la liste 
@@ -98,5 +123,49 @@ public class HashMultiSet<T> implements MultiSet<T>{
 	public int size() {
 		return col.size();
 	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new HashMultiSetIterator(this);
+	}
+	
+
+	public class HashMultiSetIterator implements Iterator<T>{
+		
+		private HashMultiSet<T> v;
+		private int index;
+		
+		public HashMultiSetIterator(HashMultiSet<T> v) {
+			this.v = v;
+			index = 0;
+			
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < v.size();
+		}
+		
+		 @Override
+         public void remove() {
+             throw new UnsupportedOperationException();
+         }
+
+		@Override
+		public T next() {
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			T ans = (T) v.col.get(v);
+			index++;
+			return ans;
+		}
+		
+		
+		
+		
+	}
+
+
 
 }
