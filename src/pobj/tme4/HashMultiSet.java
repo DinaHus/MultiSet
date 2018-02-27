@@ -1,16 +1,17 @@
 package pobj.tme4;
 
 import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T>{
 	private HashMap<T,Integer> col;
-	int size =0;
+	int size = 0;
 
 	/**
 	 * Construit une nouvelle HashMap vide
@@ -114,8 +115,9 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 	@Override
 	public void clear() {
 		col.clear();
-		
 	}
+	
+	
 	/**
 	 * @return la taille de la liste
 	 */
@@ -126,46 +128,63 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 	
 	@Override
 	public Iterator<T> iterator() {
-		return new HashMultiSetIterator(this);
+		return new HashMultiSetIterator(col);
 	}
 	
+	public List<T> elements(){
+		return new ArrayList<T>(this.col.keySet());	//Recupere les cles des elems dans arraylist
+	}
+	  
 
 	public class HashMultiSetIterator implements Iterator<T>{
 		
-		private HashMultiSet<T> v;
-		private int index;
+		private Iterator<Map.Entry<T, Integer>> listIterator;
+		private Map.Entry<T, Integer> elem;
+		private int cpt = 0;
 		
-		public HashMultiSetIterator(HashMultiSet<T> v) {
-			this.v = v;
-			index = 0;
-			
+		public HashMultiSetIterator(HashMap<T, Integer> v) {
+			this.listIterator = v.entrySet().iterator();
+			this.elem = listIterator.next();
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return index < v.size();
+			int elemCpt = elem.getValue();
+			
+			if(this.cpt < elemCpt){
+				return true;
+			}else{
+				return this.listIterator.hasNext();
+			}
 		}
 		
 		 @Override
          public void remove() {
-             throw new UnsupportedOperationException();
+/*			 Map.Entry<T, Integer> cursor = listIterator.next();
+			 if(!listIterator.hasNext()){
+				 
+			 }
+             while(this.listIterator.hasNext()){
+            	 
+			}
+ */        
          }
 
 		@Override
 		public T next() {
+			int elemCpt = elem.getValue();
 			if(!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			T ans = (T) v.col.get(v);
-			index++;
-			return ans;
-		}
-		
-		
-		
+			if(cpt < elemCpt){
+				cpt++;
+				return this.elem.getKey();
+			}else{	//Au cas ou on est a la derniere valeur de l'element
+				this.elem = listIterator.next();
+				return elem.getKey();
+			}
+		}	
 		
 	}
-
-
 
 }

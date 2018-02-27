@@ -1,5 +1,7 @@
 package pobj.tme4;
 
+import java.util.List;
+
 public interface MultiSet<T> extends  Iterable<T>{
 	public boolean add(T e, int count);
 	public boolean add(T e);
@@ -8,4 +10,5 @@ public interface MultiSet<T> extends  Iterable<T>{
 	public int count(T o);
 	public void clear();	
 	public int size();
+	public List<T> elements();
 }
