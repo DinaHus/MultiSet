@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T>{
+public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T> {
 	private HashMap<T,Integer> col;
 	int size = 0;
 
@@ -36,7 +36,19 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			this.size++;
 		}
 	}
-	
+
+	// Methods.
+
+	@Override
+	public List<T> elements() {
+		return new ArrayList<T>(this.col.keySet());
+	}
+
+	@Override
+	public boolean contains(Object o) {
+		return this.col.containsKey(o);
+	}
+
 	/**
 	 * Ajout 
 	 * @param e clé de type T
@@ -87,6 +99,7 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 		return col.remove(e,1);
 	}
 
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean remove(Object e, int count) {
@@ -99,6 +112,7 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 		}
 		return true;
 	}
+
 	/**
 	 * retourne la valeur associer a un objet T de la liste
 	 * @param T object
@@ -109,35 +123,25 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			return 0;
 		return col.get(o).intValue();
 	}
-	/**
-	 * effectue un clear de la liste 
-	 */
+
 	@Override
 	public void clear() {
-		col.clear();
+		this.size = 0;
+		this.col.clear();
 	}
-	
-	
-	/**
-	 * @return la taille de la liste
-	 */
+
 	@Override
 	public int size() {
-		return col.size();
+		return this.size;
 	}
-	
+
 	@Override
 	public Iterator<T> iterator() {
-		return new HashMultiSetIterator(col);
+		return new HashMultiSetIterator<T>(this.col);
 	}
-	
-	public List<T> elements(){
-		return new ArrayList<T>(this.col.keySet());	//Recupere les cles des elems dans arraylist
-	}
-	  
 
-	public class HashMultiSetIterator implements Iterator<T>{
-		
+	private class HashMultiSetIterator<T> implements Iterator<T> {
+
 		private Iterator<Map.Entry<T, Integer>> listIterator;
 		private Map.Entry<T, Integer> elem;
 		private int cpt = 0;
@@ -146,7 +150,7 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			this.listIterator = v.entrySet().iterator();
 			this.elem = listIterator.next();
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 			int elemCpt = elem.getValue();
@@ -157,34 +161,20 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 				return this.listIterator.hasNext();
 			}
 		}
-		
-		 @Override
-         public void remove() {
-/*			 Map.Entry<T, Integer> cursor = listIterator.next();
-			 if(!listIterator.hasNext()){
-				 
-			 }
-             while(this.listIterator.hasNext()){
-            	 
-			}
- */        
-         }
 
 		@Override
 		public T next() {
-			int elemCpt = elem.getValue();
-			if(!hasNext()) {
-				throw new NoSuchElementException();
-			}
-			if(cpt < elemCpt){
-				cpt++;
-				return this.elem.getKey();
-			}else{	//Au cas ou on est a la derniere valeur de l'element
-				this.elem = listIterator.next();
-				return elem.getKey();
-			}
-		}	
-		
-	}
+			int count = this.elem.getValue();
 
+			if (this.cpt < count) {
+				this.cpt++;
+				return this.elem.getKey();
+			} else {
+				this.cpt = 1;
+				this.elem = this.listIterator.next();
+				return this.elem.getKey();
+			}
+		}
+
+	}
 }
