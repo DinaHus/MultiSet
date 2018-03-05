@@ -21,6 +21,7 @@ private MultiSet<String> m;
 		m.add("a",3);
 		m.add("b");
 		m.add("c",2);
+		
 	}
 	/* test pour remove, clear, size
 	 * 
@@ -44,11 +45,12 @@ private MultiSet<String> m;
 	
 	@Test
 	public void testSize() {
+		
 		assertEquals(6,m.size());
 		m.add("a");
 		assertEquals(7,m.size());
 		m.remove("a",4);
-		assertEquals(0,m.size());
+		assertEquals(3,m.size());
 	}
 	
 	@Test(expected = IllegalArgumentException.class) 
@@ -80,10 +82,10 @@ private MultiSet<String> m;
 		m.remove("d",4);
 		m.remove("nombre",1);
 		
-		assertEquals(9,m.count("lettre"));
+		assertEquals(10,m.count("lettre"));
 		assertEquals(0,m.count("d"));
-		assertEquals(23,m.size());
-		assertEquals("[a:6; b:1; c:2; lettre:9; chiffre:5]",m.toString());
+		assertEquals(24,m.size());
+		assertEquals("[a:6; b:1; c:2; lettre:10; chiffre:5]",m.toString());
 		
 		
 	}

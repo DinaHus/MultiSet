@@ -68,6 +68,9 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			col.put(e, x2);
 			//Retourne boolean, verifie si la valeur de x1 et x2 sont identique
 			//autrement dit, si l'ajout s'est bien passer, et que "e" a pris sa nouvelle valeur
+			
+			this.size += count;
+			assert isConsistent();
 			return x2 != x1;
 		
 		}else{
@@ -77,6 +80,9 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			this.col.put(e,x2);
 			//Retourne boolean, verifie si la valeur de x1 et x2 sont identique
 			//autrement dit, si l'ajout s'est bien passer, et que "e" a pris sa nouvelle valeur
+			
+			this.size += count;
+			assert isConsistent();
 			return x2 != x1;
 		}
 	}
@@ -104,18 +110,26 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean remove(Object e, int count) {
+	public boolean remove(Object e, int count) {		
 		if(count <= 0) 
 			throw new IllegalArgumentException("argument negatif");
-		if(col.containsKey(e)){
-			if(col.get(e) == 1)
-				col.remove(e);
-			else
-				col.put((T)e, col.get(e) - 1);
-			size--;
-		}
+		Integer tmp = this.col.get(e);
+		
+		if (tmp == null) {
+			assert isConsistent();
+			return false;
+		} else {
+			tmp -= count;
+			if (tmp == 0) {
+				this.col.remove(e);
+			} else {
+				this.col.put((T) e, tmp);
+			}
+		}	
+		this.size -= count;
+		//assert isConsistent();
 		return true;
-	}
+		}
 
 	/**
 	 * retourne la valeur associer a un objet T de la liste
@@ -162,12 +176,26 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 		return s.toString();
 		
 	}
+	
+	public boolean isConsistent(){
+		boolean bool = true;
+		int taille = 0;
+		for (T i: elements()){
+			if (count(i) <= 0)
+				bool=false;
+			taille+=count(i);
+		}
+		if (taille != this.size())
+			bool = false;
+		return bool;
+	}
 
 	@Override
 	public Iterator<T> iterator() {
 		return new HashMultiSetIterator<T>(this.col);
 	}
 
+	@SuppressWarnings("hiding")
 	private class HashMultiSetIterator<T> implements Iterator<T> {
 
 		private Iterator<Map.Entry<T, Integer>> listIterator;

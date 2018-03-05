@@ -6,9 +6,10 @@ TESTS_TME4="\
   pobj.tme4.test.CollectionTest \
 "
 
-#TESTS_TME5="\
-#  pobj.tme5.test.HashMultiSetTest \
-#"
+TESTS_TME5="\
+  pobj.tme5.test.HashMultiSetTest \
+  pobj.tme5.test.HashMultiSetTest2 \
+"
 
 TESTS="$TESTS_TME4 $TESTS_TME5"
 
