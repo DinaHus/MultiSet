@@ -23,7 +23,7 @@ public class MultiSetParser {
 			br = new BufferedReader(new FileReader(file));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			throw new InvalidMultiSetFormat("Fichier non existant.");
+			throw new InvalidMultiSetFormat("Fichier non existant.", e);
 		}
 		
 		
@@ -33,9 +33,9 @@ public class MultiSetParser {
 					tab = word.split(":");
 					try{
 						j = Integer.decode(tab[1]);
-					} catch(NumberFormatException nfe){
-						nfe.printStackTrace();
-						throw new InvalidMultiSetFormat("apres le delimiteur la chaine n'est pas un nombre", nfe);
+					} catch(NumberFormatException e){
+						e.printStackTrace();
+						throw new InvalidMultiSetFormat("apres le delimiteur la chaine n'est pas un nombre", e);
 					}
 					for(int i = 0; i < tab[0].length(); i++)
 						if(tab[1] == null) 
@@ -46,7 +46,7 @@ public class MultiSetParser {
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new InvalidMultiSetFormat("IOException pb.");
+			throw new InvalidMultiSetFormat("IOException pb.", e);
 		}
 		
 		return ms;
