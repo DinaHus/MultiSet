@@ -1,22 +1,33 @@
 package pobj.tme5;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+//import java.util.List;
 import java.util.List;
 import java.util.Set;
 
 import pobj.util.Chrono;
 
-import java.util.Collections;
-import java.util.HashSet;
-
-
-public class WordCount {
+public class WordCount
+{
 	
-	public WordCount(){
+	public static void main(String[] args) throws IOException{
+		Chrono chrono = new Chrono(); 
+		HashMultiSet<String> ms = new HashMultiSet<String>();
+		wordcount(ms);
+		chrono.stop();
+		System.out.println(chrono);
+/*		Chrono chrono2 = new Chrono(); 
+		NaiveMultiSet<String> ms2 = new NaiveMultiSet<String>();
+		wordcount(ms2);
+		chrono2.stop();		
+*/	}
+	
+public WordCount(){
 	
 		
 	}
@@ -40,20 +51,8 @@ public class WordCount {
 		List<String> lt_final = new ArrayList<>(lt_bis);
 		Collections.sort(lt_final,Collections.reverseOrder());
 		for(int i=0;i<nbMots;i++){
-			System.out.println(lt_final);
+			System.out.println(lt_final.get(i));
 		}
 	}
-	
-	
-	public static void main(String[] args) throws IOException{
-		Chrono chrono = new Chrono(); 
-		MultiSetDecorator<String> ms = new MultiSetDecorator<String>();
-		wordcount(ms);
-		chrono.stop();
-/*		Chrono chrono2 = new Chrono(); 
-		NaiveMultiSet<String> ms2 = new NaiveMultiSet<String>();
-		wordcount(ms2);
-		chrono2.stop();		
-*/	}
 	
 }
