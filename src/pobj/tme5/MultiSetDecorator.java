@@ -22,12 +22,12 @@ public class MultiSetDecorator<T> implements MultiSet<T>{
 
 	@Override
 	public boolean add(T e) {
-		return decorated.add(e);
+		return decorated.add(e,1);
 	}
 
 	@Override
 	public boolean remove(Object e) {
-		return decorated.remove(e);
+		return decorated.remove(e,1);
 	}
 
 	@Override
