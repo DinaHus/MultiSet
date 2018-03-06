@@ -70,7 +70,6 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			//autrement dit, si l'ajout s'est bien passer, et que "e" a pris sa nouvelle valeur
 			
 			this.size += count;
-			assert isConsistent();
 			return x2 != x1;
 		
 		}else{
@@ -82,10 +81,10 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			//autrement dit, si l'ajout s'est bien passer, et que "e" a pris sa nouvelle valeur
 			
 			this.size += count;
-			assert isConsistent();
 			return x2 != x1;
 		}
 	}
+
 
 	/**
 	 * ajoute un objet T dans la liste courante sans valeur
@@ -116,7 +115,6 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 		Integer tmp = this.col.get(e);
 		
 		if (tmp == null) {
-			assert isConsistent();
 			return false;
 		} else {
 			tmp -= count;
@@ -127,7 +125,6 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 			}
 		}	
 		this.size -= count;
-		//assert isConsistent();
 		return true;
 		}
 
@@ -177,18 +174,7 @@ public class HashMultiSet<T> extends AbstractCollection<T> implements MultiSet<T
 		
 	}
 	
-	public boolean isConsistent(){
-		boolean bool = true;
-		int taille = 0;
-		for (T i: elements()){
-			if (count(i) <= 0)
-				bool=false;
-			taille+=count(i);
-		}
-		if (taille != this.size())
-			bool = false;
-		return bool;
-	}
+
 
 	@Override
 	public Iterator<T> iterator() {

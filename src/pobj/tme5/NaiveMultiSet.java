@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 public class NaiveMultiSet<T> extends AbstractCollection<T> implements MultiSet<T>{
-	private List<T> liste = new ArrayList<T>();;
+	
+	private List<T> liste = new ArrayList<T>();
 	
 
 	@Override
