@@ -26,6 +26,7 @@ public class MultiSetParser {
 			throw new InvalidMultiSetFormat("Fichier non existant.");
 		}
 		
+		
 		try {
 			while((line = br.readLine())!=null) {
 				for(String word : line.split("\\P{L}+")) {
